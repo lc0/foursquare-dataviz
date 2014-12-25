@@ -28,7 +28,7 @@ shinyUI(fluidPage(
   hr(),
   fluidRow(
     column(3,
-           selectInput('year', 'Year', c(2000:2010), 2010),
+           selectInput('year', 'Year', c(2013:2014), 2014),
            selectInput('maxCities', 'Maximum cities to display', choices=c(
              5, 25, 50, 100, 200, 500, 2000, 5000, 10000, All = 100000
            ), selected = 100)

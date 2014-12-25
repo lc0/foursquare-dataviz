@@ -71,6 +71,9 @@ seattle_geojson <- list(
 shinyServer(function(input, output, session) {
   
   map <- createLeafletMap(session, "map")
+  # Encoding(foursquareData$city) <- "utf8"
+  # foursquareData$city <- enc2native(foursquareData$city)
+  # foursquareData$country <- enc2native(foursquareData$country)
   
   session$onFlushed(once=TRUE, function() {
     #map$addGeoJSON(seattle_geojson)
@@ -123,7 +126,7 @@ shinyServer(function(input, output, session) {
       return(NULL)
 
     data.frame(
-      Location = sprintf("%s, %s", checkinsInBounds()$country, checkinsInBounds()$city),
+      Location = (sprintf("%s, %s", checkinsInBounds()$country, checkinsInBounds()$city)),
       Category = checkinsInBounds()$category,
       Date = format(as.POSIXct(as.numeric(checkinsInBounds()$created), origin="1970-01-01"), "%Y-%m-%d %H:%M:%OS")
     )
