@@ -71,13 +71,16 @@ seattle_geojson <- list(
 shinyServer(function(input, output, session) {
   
   map <- createLeafletMap(session, "map")
+
+  #foursquareData <- list('2013' = f13, '2014' = foursquareData2014)
+
   # Encoding(foursquareData$city) <- "utf8"
   # foursquareData$city <- enc2native(foursquareData$city)
   # foursquareData$country <- enc2native(foursquareData$country)
   
   session$onFlushed(once=TRUE, function() {
     #map$addGeoJSON(seattle_geojson)
-    map$addCircle(foursquareData$lat, foursquareData$lng)
+
   })
   
   
@@ -141,10 +144,19 @@ shinyServer(function(input, output, session) {
     latRng <- range(bounds$north, bounds$south)
     lngRng <- range(bounds$east, bounds$west)
 
-    subset(foursquareData,
+    subset(foursquareData[[checkinYear()]],
            lat >= latRng[1] & lat <= latRng[2] &
              lng >= lngRng[1] & lng <= lngRng[2])
   })
+
+
+  checkinYear <- reactive({
+    map$clearShapes()
+    map$addCircle(foursquareData[[input$year]]$lat, foursquareData[[input$year]]$lng)
+    # TODO: here we can have some caching and loading new years
+    input$year
+  })
+
 
 
 })
