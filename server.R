@@ -117,4 +117,31 @@ shinyServer(function(input, output, session) {
       )
     ))
   })
+
+  output$checkins <- renderTable({
+    if (nrow(checkinsInBounds()) == 0)
+      return(NULL)
+
+    data.frame(
+      Location = sprintf("%s, %s", checkinsInBounds()$country, checkinsInBounds()$city),
+      Category = checkinsInBounds()$category,
+      Date = format(as.POSIXct(as.numeric(checkinsInBounds()$created), origin="1970-01-01"), "%Y-%m-%d %H:%M:%OS")
+    )
+  }, include.rownames = FALSE)
+
+
+  # The cities that are within the visible bounds of the map
+  checkinsInBounds <- reactive({
+    if (is.null(input$map_bounds))
+      return(uspop2000[FALSE,])
+    bounds <- input$map_bounds
+    latRng <- range(bounds$north, bounds$south)
+    lngRng <- range(bounds$east, bounds$west)
+
+    subset(foursquareData,
+           lat >= latRng[1] & lat <= latRng[2] &
+             lng >= lngRng[1] & lng <= lngRng[2])
+  })
+
+
 })
