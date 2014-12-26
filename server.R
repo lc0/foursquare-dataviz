@@ -5,11 +5,16 @@ shinyServer(function(input, output, session) {
   
   map <- createLeafletMap(session, "map")
 
-  #foursquareData <- list('2013' = f13, '2014' = foursquareData2014)
+  #Encoding(foursquareData2013$country) <- "no"
+  #Encoding(foursquareData2014$country) <- "no"
+  #foursquareData <- list('2013' = foursquareData2013, '2014' = foursquareData2014)
 
-  # Encoding(foursquareData$city) <- "utf8"
+  # Encoding(foursquareData[["2014"]]$city) <- "unknown"
   # foursquareData$city <- enc2native(foursquareData$city)
-  # foursquareData$country <- enc2native(foursquareData$country)
+  
+  # print(foursquareData[["2014"]]$country)
+  # foursquareData[["2014"]]$country <- shiny::HTML(foursquareData[["2014"]]$country)
+  # print(foursquareData[["2014"]]$country)
   
   session$onFlushed(once=TRUE, function() {
     map$addMarker(foursquareData[["2014"]]$lat, foursquareData[["2014"]]$lng)
@@ -47,7 +52,7 @@ shinyServer(function(input, output, session) {
       return(NULL)
 
     data.frame(
-      Location = (sprintf("%s, %s", checkinsInBounds()$country, checkinsInBounds()$city)),
+      Location = paste(checkinsInBounds()$country, checkinsInBounds()$city, sep=" / "),
       Category = checkinsInBounds()$category,
       Date = format(as.POSIXct(as.numeric(checkinsInBounds()$created), origin="1970-01-01"), "%Y-%m-%d %H:%M:%OS")
     )
