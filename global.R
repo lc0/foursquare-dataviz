@@ -83,3 +83,17 @@ foursquare.getCheckins <- function(token, v, startStr, endStr){
   checkins.df<-as.data.frame(list(country=country, city=city, lat=lat, lng=lng, category=category, created=created, name=name), stringsAsFactors=FALSE)
   return(checkins.df)
 }
+
+
+foursquareData2013 <- foursquare.getCheckins(foursquareToken, "20140119", "2013-01-01 00:00:00", "2013-12-31 23:59:49")
+foursquareData2013$year = 2013
+foursquareData2014 <- foursquare.getCheckins(foursquareToken, "20140119", "2014-01-01 00:00:00", "2014-12-31 23:59:49")
+foursquareData2014$year = 2014
+
+# binding two years into one dataframe
+foursquareData <- rbind(foursquareData2013, foursquareData2014)
+
+
+
+
+
