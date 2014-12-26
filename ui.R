@@ -14,30 +14,29 @@ shinyUI(fluidPage(
   ),
   fluidRow(
     column(8, offset=3,
-           h2('Population of US cities'),
+           h2('Foursquare activity'),
            htmlWidgetOutput(
              outputId = 'desc',
              HTML(paste(
                'The map is centered at <span id="lat"></span>, <span id="lng"></span>',
                'with a zoom level of <span id="zoom"></span>.<br/>',
-               'Top <span id="shownCities"></span> out of <span id="totalCities"></span> visible cities are displayed.'
+               'Selected <span id="shownCheckins"></span> checkins displayed in <span id="shownCities"></span> visible cities ',
+               'and <span id="shownCountries"></span> countries.'
              ))
            )
     )
   ),
   hr(),
   fluidRow(
-    column(3,
-           selectInput('year', 'Year', c(2013:2014), 2014),
-           selectInput('maxCities', 'Maximum cities to display', choices=c(
-             5, 25, 50, 100, 200, 500, 2000, 5000, 10000, All = 100000
-           ), selected = 100)
+    column(2,
+           selectInput('year', 'Year', c(2013:2014), 2014)
+           # TODO: countries, types
     ),
     column(4,
            h4('Visible checkins'),
            tableOutput('checkins')
     ),
-    column(5,
+    column(6,
            h4(id='countriesPlotLabel', class='shiny-text-output'),
            plotOutput('countriesPlot', width='100%', height='500px'),
            h4(id='citiesPlotLabel', class='shiny-text-output'),

@@ -71,7 +71,11 @@ shinyServer(function(input, output, session) {
   checkinYear <- reactive({
     map$clearShapes()
     map$clearMarkers()
-    map$addMarker(foursquareData[[input$year]]$lat, foursquareData[[input$year]]$lng)
+    map$addMarker(foursquareData[[input$year]]$lat, foursquareData[[input$year]]$lng
+                  #, list(title="foursquareData[[input$year]]$name")
+                  )
+    map$addCircle(foursquareData[[input$year]]$lat, foursquareData[[input$year]]$lng)
+    
     # TODO: here we can have some caching and loading new years
     input$year
   })
@@ -123,5 +127,32 @@ shinyServer(function(input, output, session) {
     sprintf("Visited %i cities", length(table(checkinsInBounds()$city)))
   })
 
+  observe({
+    event <- input$map_marker_click
+    if (is.null(event))
+      return()
+    map$clearPopups()
+    
+    #isolate({
+    #  content <- as.character(tagList(
+    #    tags$strong(paste(event)),
+    #    tags$br()
+    #  ))
+    #  map$showPopup(event$lat, event$lng, content, event$id)
+    #})
+  })
+  
+  output$desc <- reactive({
+    if (is.null(input$map_bounds))
+      return(list())
+    list(
+      lat = mean(c(input$map_bounds$north, input$map_bounds$south)),
+      lng = mean(c(input$map_bounds$east, input$map_bounds$west)),
+      zoom = input$map_zoom,
+      shownCheckins = nrow(checkinsInBounds()),
+      shownCountries = length(table(checkinsInBounds()$country)),
+      shownCities = length(table(checkinsInBounds()$city))
+    )
+  })
 
 })
