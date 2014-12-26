@@ -33,14 +33,15 @@ shinyUI(fluidPage(
              5, 25, 50, 100, 200, 500, 2000, 5000, 10000, All = 100000
            ), selected = 100)
     ),
-    column(6,
+    column(4,
            h4('Visible checkins'),
            tableOutput('checkins')
     ),
-    column(3,
-           h4(id='cityTimeSeriesLabel', class='shiny-text-output'),
-           plotOutput('cityTimeSeries', width='100%', height='250px')
+    column(5,
+           h4(id='countriesPlotLabel', class='shiny-text-output'),
+           plotOutput('countriesPlot', width='100%', height='500px'),
+           h4(id='citiesPlotLabel', class='shiny-text-output'),
+           plotOutput('citiesPlot', width='100%', height='500px')
     )
   )
-  #htmlOutput("details")
 ))
