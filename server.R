@@ -17,7 +17,8 @@ shinyServer(function(input, output, session) {
   # print(foursquareData[["2014"]]$country)
   
   session$onFlushed(once=TRUE, function() {
-    map$addMarker(foursquareData[["2014"]]$lat, foursquareData[["2014"]]$lng)
+    #map$addMarker(foursquareData$lat[foursquareData$year == 2014], 
+    #              foursquareData$lng[foursquareData$year == 2014])
   })
   
   
@@ -67,19 +68,21 @@ shinyServer(function(input, output, session) {
     latRng <- range(bounds$north, bounds$south)
     lngRng <- range(bounds$east, bounds$west)
 
-    subset(foursquareData[[checkinYear()]],
+    subset(foursquareData,
            lat >= latRng[1] & lat <= latRng[2] &
-             lng >= lngRng[1] & lng <= lngRng[2])
+             lng >= lngRng[1] & lng <= lngRng[2] & year == checkinYear() )
   })
 
 
   checkinYear <- reactive({
     map$clearShapes()
     map$clearMarkers()
-    map$addMarker(foursquareData[[input$year]]$lat, foursquareData[[input$year]]$lng
+    map$addMarker(foursquareData$lat[foursquareData$year == input$year], 
+                  foursquareData$lng[foursquareData$year == input$year]
                   #, list(title="foursquareData[[input$year]]$name")
                   )
-    map$addCircle(foursquareData[[input$year]]$lat, foursquareData[[input$year]]$lng)
+    map$addCircle(foursquareData$lat[foursquareData$year == input$year], 
+                  foursquareData$lng[foursquareData$year == input$year])
     
     # TODO: here we can have some caching and loading new years
     input$year

@@ -86,8 +86,4 @@ foursquareData2014$year = 2014
 
 # binding two years into one dataframe
 foursquareData <- rbind(foursquareData2013, foursquareData2014)
-
-
-
-
-
+print("loaded here")
