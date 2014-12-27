@@ -18,8 +18,8 @@ shinyServer(function(input, output, session) {
   # print(foursquareData[["2014"]]$country)
 
   session$onFlushed(once=TRUE, function() {
-    #map$addMarker(foursquareData$lat[foursquareData$year == 2014],
-    #              foursquareData$lng[foursquareData$year == 2014])
+    map$addCircle(foursquareData$lat[foursquareData$year == 2014],
+                  foursquareData$lng[foursquareData$year == 2014])
   })
 
 
@@ -79,13 +79,13 @@ shinyServer(function(input, output, session) {
 
   checkinYear <- reactive({
     map$clearShapes()
-    map$clearMarkers()
-    map$addMarker(foursquareData$lat[foursquareData$year == input$year],
-                  foursquareData$lng[foursquareData$year == input$year]
+    #map$clearMarkers()
+    #map$addMarker(foursquareData$lat[foursquareData$year == input$year],
+    #              foursquareData$lng[foursquareData$year == input$year]
                   #, list(title="foursquareData[[input$year]]$name")
-                  )
-    #map$addCircle(foursquareData$lat[foursquareData$year == input$year],
-    #              foursquareData$lng[foursquareData$year == input$year])
+    #              )
+    map$addCircle(foursquareData$lat[foursquareData$year == input$year],
+                  foursquareData$lng[foursquareData$year == input$year])
 
     input$year
   })
