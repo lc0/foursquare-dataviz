@@ -3,6 +3,8 @@ library(ShinyDash)
 
 shinyUI(fluidPage(
   tags$head(tags$link(rel='stylesheet', type='text/css', href='styles.css')),
+  tags$head(tags$script(src="google-analytics.js")),
+
   leafletMap(
     "map", "100%", 500,
     initialTileLayer = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
