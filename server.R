@@ -91,42 +91,49 @@ shinyServer(function(input, output, session) {
   })
 
   output$citiesPlot <- renderPlot({
-    cities <- table(checkinsInBounds()$city)
-    names_c <- names(cities)
-    #Encoding(names_c) <- 'utf8'
+    if (length(checkinsInBounds()) == 0) {
+      return(NULL)
+    }
 
-    cities_df <- data.frame(cities = names_c, checkins = as.vector(cities))
+    checkins <- table(checkinsInBounds()$city)
+    if (length(checkins) > 0) {
+      names_c <- names(checkins)
+      #Encoding(names_c) <- 'utf8'
 
-    p <- ggplot(cities_df, aes(x=reorder(cities, - checkins), y=log(checkins))) +
-      stat_summary(fun.y = sum, geom = "bar") +
-      theme(axis.text.x=element_text(angle=90)) +
-      geom_text(label=cities_df$checkins, vjust = -0.5)
+      cities_df <- data.frame(cities = names_c, checkins = as.vector(checkins))
 
-    #p <- barplot(cities)
+      p <- ggplot(cities_df, aes(x=reorder(cities, - checkins), y=log(checkins))) +
+        stat_summary(fun.y = sum, geom = "bar") +
+        theme(axis.text.x=element_text(angle=90)) +
+        geom_text(label=cities_df$checkins, vjust = -0.5)
 
-    print(p)
+      #p <- barplot(cities)
+
+      print(p)
+    }
 
   })
   output$countriesPlot <- renderPlot({
     if (length(checkinsInBounds()) == 0) {
       return(NULL)
     }
+
     checkins <- table(checkinsInBounds()$country)
+    if (length(checkins) > 0) {
+      names_c <- names(checkins)
+      #Encoding(names_c) <- "utf8"
+      cities_df <- data.frame(countries = names_c, checkins = as.vector(checkins))
 
-    names_c <- names(checkins)
-    #Encoding(names_c) <- "utf8"
 
-    cities_df <- data.frame(cities = names_c, checkins = as.vector(checkins))
+      p <- ggplot(cities_df, aes(x=reorder(countries, - checkins), y=log(checkins))) +
+        stat_summary(fun.y = sum, geom = "bar") +
+        theme(axis.text.x=element_text(angle=90)) +
+        geom_text(label=cities_df$checkins, vjust = -0.5)
 
+      #p <- barplot(checkins)
 
-    p <- ggplot(cities_df, aes(x=reorder(cities, - checkins), y=log(checkins))) +
-      stat_summary(fun.y = sum, geom = "bar") +
-      theme(axis.text.x=element_text(angle=90)) +
-      geom_text(label=cities_df$checkins, vjust = -0.5)
-
-    #p <- barplot(checkins)
-
-    print(p)
+      print(p)
+    }
   })
 
   output$countriesPlotLabel <- renderText({
