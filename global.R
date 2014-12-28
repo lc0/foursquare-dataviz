@@ -94,3 +94,6 @@ foursquareData <- foursquare.getCheckins(foursquareToken, "20140119",
                                          sprintf("%s 00:00:00", report.start_date),
                                          sprintf("%s 23:59:49",report.end_date))
 foursquareData$year = format(as.POSIXct(as.numeric(foursquareData$created), origin="1970-01-01"), "%Y")
+
+# filter out rows with NA
+foursquareData <- subset(foursquareData, !is.na(foursquareData$country))
