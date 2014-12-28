@@ -6,17 +6,6 @@ shinyServer(function(input, output, session) {
 
   map <- createLeafletMap(session, "map")
 
-  #Encoding(foursquareData2013$country) <- "no"
-  #Encoding(foursquareData2014$country) <- "no"
-  #foursquareData <- list('2013' = foursquareData2013, '2014' = foursquareData2014)
-
-  # Encoding(foursquareData[["2014"]]$city) <- "unknown"
-  # foursquareData$city <- enc2native(foursquareData$city)
-
-  # print(foursquareData[["2014"]]$country)
-  # foursquareData[["2014"]]$country <- shiny::HTML(foursquareData[["2014"]]$country)
-  # print(foursquareData[["2014"]]$country)
-
   session$onFlushed(once=TRUE, function() {
     foursquareData.noDate <- subset(foursquareData, year == 2014)
     foursquareData.noDate <- aggregate(checkins ~ name + country + city + lat + lng + category + year, data=foursquareData.noDate, FUN="length")
@@ -120,8 +109,6 @@ shinyServer(function(input, output, session) {
     checkins <- table(checkinsInBounds()$city)
     if (length(checkins) > 0) {
       names_c <- names(checkins)
-      #Encoding(names_c) <- 'utf8'
-
       cities_df <- data.frame(cities = names_c, checkins = as.vector(checkins))
 
       p <- ggplot(cities_df, aes(x=reorder(cities, - checkins), y=log(checkins))) +
@@ -143,9 +130,7 @@ shinyServer(function(input, output, session) {
     checkins <- table(checkinsInBounds()$country)
     if (length(checkins) > 0) {
       names_c <- names(checkins)
-      #Encoding(names_c) <- "utf8"
       cities_df <- data.frame(countries = names_c, checkins = as.vector(checkins))
-
 
       p <- ggplot(cities_df, aes(x=reorder(countries, - checkins), y=log(checkins))) +
         stat_summary(fun.y = sum, geom = "bar") +
