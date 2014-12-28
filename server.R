@@ -81,7 +81,7 @@ shinyServer(function(input, output, session) {
     map$clearShapes()
     #map$clearMarkers()
     #map$addMarker(foursquareData$lat[foursquareData$year == input$year],
-    #              foursquareData$lng[foursquareData$year == input$year]
+    #              foursquareData$lng[foursquareData$year == input$year],
                   #, list(title="foursquareData[[input$year]]$name")
     #              )
     map$addCircle(foursquareData$lat[foursquareData$year == input$year],
@@ -92,7 +92,6 @@ shinyServer(function(input, output, session) {
 
   output$citiesPlot <- renderPlot({
     cities <- table(checkinsInBounds()$city)
-
     names_c <- names(cities)
     #Encoding(names_c) <- 'utf8'
 
@@ -119,12 +118,13 @@ shinyServer(function(input, output, session) {
 
     cities_df <- data.frame(cities = names_c, checkins = as.vector(checkins))
 
+
     p <- ggplot(cities_df, aes(x=reorder(cities, - checkins), y=log(checkins))) +
       stat_summary(fun.y = sum, geom = "bar") +
       theme(axis.text.x=element_text(angle=90)) +
       geom_text(label=cities_df$checkins, vjust = -0.5)
 
-    #p <- barplot(cities)
+    #p <- barplot(checkins)
 
     print(p)
   })
