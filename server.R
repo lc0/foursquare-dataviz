@@ -18,8 +18,21 @@ shinyServer(function(input, output, session) {
   # print(foursquareData[["2014"]]$country)
 
   session$onFlushed(once=TRUE, function() {
-    map$addCircle(foursquareData$lat[foursquareData$year == 2014],
-                  foursquareData$lng[foursquareData$year == 2014])
+    foursquareData.noDate <- subset(foursquareData, year == 2014)
+    foursquareData.noDate <- aggregate(checkins ~ name + country + city + lat + lng + category + year, data=foursquareData.noDate, FUN="length")
+
+    "
+    radiusFactor <- 200000
+    map$addCircle(foursquareData.noDate$lat, foursquareData.noDate$lng,
+                  radius=sqrt(foursquareData.noDate$checkins) * radiusFactor / max(5, input$map_zoom)^2,
+                  options=list(
+                    weight=1.2,
+                    fill=TRUE,
+                    color='#F00'
+                  ))
+    "
+
+    map$addMarker(foursquareData.noDate$lat, foursquareData.noDate$lng)
   })
 
 
@@ -79,13 +92,22 @@ shinyServer(function(input, output, session) {
 
   checkinYear <- reactive({
     map$clearShapes()
-    #map$clearMarkers()
-    #map$addMarker(foursquareData$lat[foursquareData$year == input$year],
-    #              foursquareData$lng[foursquareData$year == input$year],
-                  #, list(title="foursquareData[[input$year]]$name")
-    #              )
-    map$addCircle(foursquareData$lat[foursquareData$year == input$year],
-                  foursquareData$lng[foursquareData$year == input$year])
+    map$clearMarkers()
+
+    foursquareData.noDate <- subset(foursquareData, year == input$year)
+    foursquareData.noDate <- aggregate(checkins ~ name + country + city + lat + lng + category + year, data=foursquareData.noDate, FUN="length")
+
+    "
+    radiusFactor <- 200000
+    map$addCircle(foursquareData.noDate$lat, foursquareData.noDate$lng,
+                  radius=sqrt(foursquareData.noDate$checkins) * radiusFactor / max(5, input$map_zoom)^2,
+                  options=list(
+                    weight=1.2,
+                    fill=TRUE,
+                    color='#F00'
+                  ))
+    "
+    map$addMarker(foursquareData.noDate$lat, foursquareData.noDate$lng)
 
     input$year
   })

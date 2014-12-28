@@ -97,3 +97,10 @@ foursquareData$year = format(as.POSIXct(as.numeric(foursquareData$created), orig
 
 # filter out rows with NA
 foursquareData <- subset(foursquareData, !is.na(foursquareData$country))
+
+# aggregation is not suitable, because we are loosing date
+# aggredate by place
+foursquareData$checkins <- 1
+# aggregate(checkins ~ name + country + city + lat + lng + category + created + year, data=tail(checkinsIn), FUN="length")
+
+
