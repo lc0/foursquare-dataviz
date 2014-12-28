@@ -1,4 +1,5 @@
 library(leaflet)
+library(ShinyDash)
 
 shinyUI(fluidPage(
   tags$head(tags$link(rel='stylesheet', type='text/css', href='styles.css')),
@@ -8,8 +9,7 @@ shinyUI(fluidPage(
     initialTileLayerAttribution = HTML('Maps by <a href="http://www.mapbox.com/">Mapbox</a>'),
     options=list(
       center = c(45.954779, 9.0808982),
-      zoom = 4,
-      maxBounds = list(list(17, -180), list(59, 180))
+      zoom = 4
     )
   ),
   fluidRow(
@@ -29,7 +29,7 @@ shinyUI(fluidPage(
   hr(),
   fluidRow(
     column(2,
-           selectInput('year', 'Year', c(2013:2014), 2014)
+           selectInput('year', 'Year', unique(as.character(foursquareData$year)), 2014)
            # TODO: countries, types
     ),
     column(4,

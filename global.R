@@ -5,6 +5,10 @@ library("RJSONIO")
 # https://foursquare.com/developers/apps
 foursquareToken <- "FOURSQUARE-TOKEN-HERE"
 
+report.start_date <- "2012-01-01"
+report.end_date <- "2014-12-31"
+
+
 import.packages <- function(pkg) {
   if (!require(pkg, character.only=TRUE)) {
     install.packages(pkg, dep=TRUE)
@@ -86,11 +90,17 @@ foursquare.getCheckins <- function(token, v, startStr, endStr){
 }
 
 
-foursquareData2013 <- foursquare.getCheckins(foursquareToken, "20140119", "2013-01-01 00:00:00", "2013-12-31 23:59:49")
-foursquareData2013$year = 2013
-foursquareData2014 <- foursquare.getCheckins(foursquareToken, "20140119", "2014-01-01 00:00:00", "2014-12-31 23:59:49")
-foursquareData2014$year = 2014
+foursquareData <- foursquare.getCheckins(foursquareToken, "20140119",
+                                         sprintf("%s 00:00:00", report.start_date),
+                                         sprintf("%s 23:59:49",report.end_date))
+foursquareData$year = format(as.POSIXct(as.numeric(foursquareData$created), origin="1970-01-01"), "%Y")
 
-# binding two years into one dataframe
-foursquareData <- rbind(foursquareData2013, foursquareData2014)
-print("loaded here")
+# filter out rows with NA
+foursquareData <- subset(foursquareData, !is.na(foursquareData$country))
+
+# aggregation is not suitable, because we are loosing date
+# aggredate by place
+foursquareData$checkins <- 1
+# aggregate(checkins ~ name + country + city + lat + lng + category + created + year, data=tail(checkinsIn), FUN="length")
+
+

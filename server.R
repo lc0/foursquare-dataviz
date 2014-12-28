@@ -18,8 +18,21 @@ shinyServer(function(input, output, session) {
   # print(foursquareData[["2014"]]$country)
 
   session$onFlushed(once=TRUE, function() {
-    map$addCircle(foursquareData$lat[foursquareData$year == 2014],
-                  foursquareData$lng[foursquareData$year == 2014])
+    foursquareData.noDate <- subset(foursquareData, year == 2014)
+    foursquareData.noDate <- aggregate(checkins ~ name + country + city + lat + lng + category + year, data=foursquareData.noDate, FUN="length")
+
+    "
+    radiusFactor <- 200000
+    map$addCircle(foursquareData.noDate$lat, foursquareData.noDate$lng,
+                  radius=sqrt(foursquareData.noDate$checkins) * radiusFactor / max(5, input$map_zoom)^2,
+                  options=list(
+                    weight=1.2,
+                    fill=TRUE,
+                    color='#F00'
+                  ))
+    "
+
+    map$addMarker(foursquareData.noDate$lat, foursquareData.noDate$lng)
   })
 
 
@@ -79,54 +92,70 @@ shinyServer(function(input, output, session) {
 
   checkinYear <- reactive({
     map$clearShapes()
-    #map$clearMarkers()
-    #map$addMarker(foursquareData$lat[foursquareData$year == input$year],
-    #              foursquareData$lng[foursquareData$year == input$year]
-                  #, list(title="foursquareData[[input$year]]$name")
-    #              )
-    map$addCircle(foursquareData$lat[foursquareData$year == input$year],
-                  foursquareData$lng[foursquareData$year == input$year])
+    map$clearMarkers()
+
+    foursquareData.noDate <- subset(foursquareData, year == input$year)
+    foursquareData.noDate <- aggregate(checkins ~ name + country + city + lat + lng + category + year, data=foursquareData.noDate, FUN="length")
+
+    "
+    radiusFactor <- 200000
+    map$addCircle(foursquareData.noDate$lat, foursquareData.noDate$lng,
+                  radius=sqrt(foursquareData.noDate$checkins) * radiusFactor / max(5, input$map_zoom)^2,
+                  options=list(
+                    weight=1.2,
+                    fill=TRUE,
+                    color='#F00'
+                  ))
+    "
+    map$addMarker(foursquareData.noDate$lat, foursquareData.noDate$lng)
 
     input$year
   })
 
   output$citiesPlot <- renderPlot({
-    cities <- table(checkinsInBounds()$city)
+    if (length(checkinsInBounds()) == 0) {
+      return(NULL)
+    }
 
-    names_c <- names(cities)
-    #Encoding(names_c) <- 'utf8'
+    checkins <- table(checkinsInBounds()$city)
+    if (length(checkins) > 0) {
+      names_c <- names(checkins)
+      #Encoding(names_c) <- 'utf8'
 
-    cities_df <- data.frame(cities = names_c, checkins = as.vector(cities))
+      cities_df <- data.frame(cities = names_c, checkins = as.vector(checkins))
 
-    p <- ggplot(cities_df, aes(x=reorder(cities, - checkins), y=log(checkins))) +
-      stat_summary(fun.y = sum, geom = "bar") +
-      theme(axis.text.x=element_text(angle=90)) +
-      geom_text(label=cities_df$checkins, vjust = -0.5)
+      p <- ggplot(cities_df, aes(x=reorder(cities, - checkins), y=log(checkins))) +
+        stat_summary(fun.y = sum, geom = "bar") +
+        theme(axis.text.x=element_text(angle=90)) +
+        geom_text(label=cities_df$checkins, vjust = -0.5)
 
-    #p <- barplot(cities)
+      #p <- barplot(cities)
 
-    print(p)
+      print(p)
+    }
 
   })
   output$countriesPlot <- renderPlot({
     if (length(checkinsInBounds()) == 0) {
       return(NULL)
     }
+
     checkins <- table(checkinsInBounds()$country)
+    if (length(checkins) > 0) {
+      names_c <- names(checkins)
+      #Encoding(names_c) <- "utf8"
+      cities_df <- data.frame(countries = names_c, checkins = as.vector(checkins))
 
-    names_c <- names(checkins)
-    #Encoding(names_c) <- "utf8"
 
-    cities_df <- data.frame(cities = names_c, checkins = as.vector(checkins))
+      p <- ggplot(cities_df, aes(x=reorder(countries, - checkins), y=log(checkins))) +
+        stat_summary(fun.y = sum, geom = "bar") +
+        theme(axis.text.x=element_text(angle=90)) +
+        geom_text(label=cities_df$checkins, vjust = -0.5)
 
-    p <- ggplot(cities_df, aes(x=reorder(cities, - checkins), y=log(checkins))) +
-      stat_summary(fun.y = sum, geom = "bar") +
-      theme(axis.text.x=element_text(angle=90)) +
-      geom_text(label=cities_df$checkins, vjust = -0.5)
+      #p <- barplot(checkins)
 
-    #p <- barplot(cities)
-
-    print(p)
+      print(p)
+    }
   })
 
   output$countriesPlotLabel <- renderText({
