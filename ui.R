@@ -5,6 +5,11 @@ shinyUI(fluidPage(
   tags$head(tags$link(rel='stylesheet', type='text/css', href='styles.css')),
   tags$head(tags$script(src="google-analytics.js")),
 
+  tags$a(href="https://github.com/lc0/foursquare-dataviz", id="github-badge", "",
+         tags$img(src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png",
+                  alt="Fork me on GitHub")
+  ),
+
   leafletMap(
     "map", "100%", 500,
     initialTileLayer = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",

@@ -37,3 +37,10 @@ body {
   font-weight: 400;
 }
 
+#github-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
+  z-index: 1;
+}
