@@ -6,7 +6,7 @@ library("RJSONIO")
 foursquareToken <- "FOURSQUARE-TOKEN-HERE"
 
 report.start_date <- "2012-01-01"
-report.end_date <- "2014-12-31"
+report.end_date <- "2015-04-18"
 
 
 import.packages <- function(pkg) {
