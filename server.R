@@ -70,20 +70,34 @@ shinyServer(function(input, output, session) {
     latRng <- range(bounds$north, bounds$south)
     lngRng <- range(bounds$east, bounds$west)
 
-    newdf <- subset(foursquareData,
-           lat >= latRng[1] & lat <= latRng[2] &
-             lng >= lngRng[1] & lng <= lngRng[2] & year==checkinYear()
-    )
+    newdf <- subset(foursquareData, lat >= latRng[1] & lat <= latRng[2] & lng >= lngRng[1] & lng <= lngRng[2])
+    year_filter <- checkinYear()
+
+    if (year_filter %in% foursquareData$year) {
+      newdf <- subset(newdf, year==year_filter)
+    }
+
+    print(checkinYear())
+    print(nrow(newdf))
+
     newdf <-droplevels(newdf)
   })
 
 
 
   checkinYear <- reactive({
+    # TODO: clean-up here, why we do rendering in reactive
+
     map$clearShapes()
     map$clearMarkers()
 
-    foursquareData.noDate <- subset(foursquareData, year == input$year)
+    if (input$year %in% foursquareData$year) {
+      foursquareData.noDate <- subset(foursquareData, year == input$year)
+    }
+    else {
+      foursquareData.noDate <- foursquareData
+    }
+
     foursquareData.noDate <- aggregate(checkins ~ name + country + city + lat + lng + category + year, data=foursquareData.noDate, FUN="length")
 
     "

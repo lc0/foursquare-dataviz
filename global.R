@@ -3,10 +3,10 @@ library("RJSONIO")
 
 # init foursquareToken with real tocken from
 # https://foursquare.com/developers/apps
-foursquareToken <- "FOURSQUARE-TOKEN-HERE"
+# foursquareToken <- "FOURSQUARE-TOKEN-HERE"
 
 report.start_date <- "2012-01-01"
-report.end_date <- "2015-04-18"
+report.end_date <- "2015-07-21"
 
 
 import.packages <- function(pkg) {
@@ -103,4 +103,6 @@ foursquareData <- subset(foursquareData, !is.na(foursquareData$country))
 foursquareData$checkins <- 1
 # aggregate(checkins ~ name + country + city + lat + lng + category + created + year, data=tail(checkinsIn), FUN="length")
 
-
+years <- unique(as.character(foursquareData$year))
+years[length(years)] <- years[1]
+years[1] <- "All years"

@@ -36,7 +36,7 @@ shinyUI(fluidPage(
   hr(),
   fluidRow(
     column(2,
-           selectInput('year', 'Year', unique(as.character(foursquareData$year)), 2014)
+           selectInput('year', 'Year', years, 2014)
            # TODO: countries, types
     ),
     column(4,
