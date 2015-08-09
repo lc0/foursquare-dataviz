@@ -104,5 +104,4 @@ foursquareData$checkins <- 1
 # aggregate(checkins ~ name + country + city + lat + lng + category + created + year, data=tail(checkinsIn), FUN="length")
 
 years <- unique(as.character(foursquareData$year))
-years[length(years)] <- years[1]
-years[1] <- "All years"
+years <- c("All years", years)

@@ -77,9 +77,6 @@ shinyServer(function(input, output, session) {
       newdf <- subset(newdf, year==year_filter)
     }
 
-    print(checkinYear())
-    print(nrow(newdf))
-
     newdf <-droplevels(newdf)
   })
 
