@@ -89,6 +89,7 @@ foursquare.getCheckins <- function(token, v, startStr, endStr){
 
 }
 
+Sys.setlocale("LC_ALL", 'en_US.UTF-8')
 
 foursquareData <- foursquare.getCheckins(foursquareToken, "20140119",
                                          sprintf("%s 00:00:00", report.start_date),
