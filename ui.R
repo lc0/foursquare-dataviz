@@ -15,8 +15,8 @@ shinyUI(fluidPage(
     initialTileLayer = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
     initialTileLayerAttribution = HTML('Maps by <a href="http://www.mapbox.com/">Mapbox</a>'),
     options=list(
-      center = c(45.954779, 9.0808982),
-      zoom = 4
+      center = c(38.0646254523068, -41.30859375),
+      zoom = 3
     )
   ),
   fluidRow(
