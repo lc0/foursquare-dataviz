@@ -1,12 +1,13 @@
 library("RCurl")
 library("RJSONIO")
 
-# init foursquareToken with real tocken from
-# https://foursquare.com/developers/apps
-# foursquareToken <- "FOURSQUARE-TOKEN-HERE"
+# Init foursquareToken with a real tocken from https://foursquare.com/developers/apps
+# Do not rewrite token if one is already exists
+if (!exists("foursquareToken"))
+  foursquareToken <- "FOURSQUARE-TOKEN-HERE"
 
 report.start_date <- "2012-01-01"
-report.end_date <- "2015-08-08"
+report.end_date <- "2015-08-15"
 
 
 import.packages <- function(pkg) {
