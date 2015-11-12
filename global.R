@@ -7,7 +7,7 @@ if (!exists("foursquareToken"))
   foursquareToken <- "FOURSQUARE-TOKEN-HERE"
 
 report.start_date <- "2012-01-01"
-report.end_date <- "2015-08-15"
+report.end_date <- "2015-11-11"
 
 
 import.packages <- function(pkg) {
@@ -39,7 +39,7 @@ foursquare.getCheckins <- function(token, v, startStr, endStr){
     while (TRUE) {
       urlTemplate <- "https://api.foursquare.com/v2/users/self/checkins?oauth_token=%s&v=%s&afterTimestamp=%s&beforeTimestamp=%s&limit=%i&offset=%i"
       apiUrl <- sprintf(urlTemplate, token, v, startTS, endTS, limit, offset)
-      json<-getURL(apiUrl, cainfo="cacert.pem", .mapUnicode=TRUE)
+      json<-getURL(apiUrl, .mapUnicode=TRUE)
       objects<-fromJSON(json)
 
       if (is.null(objects$response$checkins$count)) {
