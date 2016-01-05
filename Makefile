@@ -7,7 +7,7 @@ build:
 
 
 run:
-	docker run -i -t -p 3838:3838 \
+	docker run -i -t -p 3838:3838 -p 80:80 \
 	${DOCKER_REPO}
 
 push:

@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y \
 RUN R -e "install.packages(c('shiny', 'devtools', 'ggplot2', 'RCurl', 'leaflet', 'RJSONIO'), repos='https://cran.rstudio.com/')"
 RUN R -e "devtools::install_github('ShinyDash', 'trestletech')"
 
+EXPOSE 80
 
+COPY docker/shiny-server.conf /etc/shiny-server/shiny-server.conf
 COPY src /srv/shiny-server/foursquare-dataviz
 
-# RUN R -e "setwd('/srv/shiny-server/foursquare-dataviz/'); library(shiny); runApp(port=3838, host = '0.0.0.0')"
-
-CMD ["/bin/bash"]
+CMD ["/usr/bin/shiny-server.sh"]
