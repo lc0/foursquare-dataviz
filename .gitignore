@@ -1,3 +1,5 @@
 .R*
 *.cache
 *.rda
+
+.DS_Store
