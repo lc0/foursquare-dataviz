@@ -7,7 +7,7 @@ if (!exists("foursquareToken"))
   foursquareToken <- "FOURSQUARE-TOKEN-HERE"
 
 report.start_date <- "2012-01-01"
-report.end_date <- "2015-11-11"
+report.end_date <- "2016-04-01"
 
 
 import.packages <- function(pkg) {
