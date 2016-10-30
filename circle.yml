@@ -1,0 +1,16 @@
+machine:
+  services:
+    - docker
+
+test:
+  override:
+    - docker build .
+
+# deployment:
+#   production:
+#     branch: master
+#     commands:
+#       - docker tag $DOCKERIMAGE $AWSDOCKERTAG/$DOCKERIMAGE
+#       - docker push $AWSDOCKERTAG/$DOCKERIMAGE
+
+#       - deploy/deploy_shinyapps
