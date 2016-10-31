@@ -4,13 +4,13 @@ machine:
 
 test:
   override:
-    - docker build .
+    - make build
 
-# deployment:
-#   production:
-#     branch: master
-#     commands:
-#       - docker tag $DOCKERIMAGE $AWSDOCKERTAG/$DOCKERIMAGE
-#       - docker push $AWSDOCKERTAG/$DOCKERIMAGE
+deployment:
+  production:
+    branch: master
+    commands:
+      - curl -u $DOCKER_USER:$DOCKER_API https://cloud.docker.com/api/app/v1/service/
+      - make push
 
-#       - deploy/deploy_shinyapps
+      # - deploy/deploy_shinyapps

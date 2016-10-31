@@ -1,4 +1,4 @@
-DOCKER_REPO=lc0/foursquare-dataviz
+DOCKER_REPO=sergii/foursquare-dataviz
 TAG=latest
 
 
