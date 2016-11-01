@@ -10,7 +10,7 @@ deployment:
   production:
     branch: master
     commands:
-      - curl -u $DOCKER_USER:$DOCKER_API https://cloud.docker.com/api/app/v1/service/
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - make push
 
       # - deploy/deploy_shinyapps
