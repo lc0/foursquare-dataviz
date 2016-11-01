@@ -1,4 +1,4 @@
-DOCKER_REPO=lc0/foursquare-dataviz
+DOCKER_REPO=sergii/foursquare-dataviz
 TAG=latest
 
 
@@ -7,7 +7,8 @@ build:
 
 
 run:
-	docker run -i -t -p 80:80 ${DOCKER_REPO}
+	docker run -i -t -p 80:80 \
+		-e FOURSQUARE_TOKEN=${FOURSQUARE_TOKEN} ${DOCKER_REPO}
 
 push:
 	docker push ${DOCKER_REPO}:${TAG}

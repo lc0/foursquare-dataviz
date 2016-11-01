@@ -14,6 +14,7 @@ RUN R -e "devtools::install_github('ShinyDash', 'trestletech')"
 EXPOSE 80
 
 COPY docker/shiny-server.conf /etc/shiny-server/shiny-server.conf
+COPY docker/shiny-server.sh /usr/bin/shiny-server.sh
 COPY src /srv/shiny-server/foursquare-dataviz
 
 CMD ["/usr/bin/shiny-server.sh"]

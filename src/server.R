@@ -7,6 +7,10 @@ shinyServer(function(input, output, session) {
   map <- createLeafletMap(session, "map")
 
   session$onFlushed(once=TRUE, function() {
+    validate(
+      need(nrow(foursquareData) > 0, "Can't get Foursquare data")
+    )
+
     foursquareData.noDate <- subset(foursquareData, year == 2014)
     foursquareData.noDate <- aggregate(checkins ~ name + country + city + lat + lng + category + year, data=foursquareData.noDate, FUN="length")
 
