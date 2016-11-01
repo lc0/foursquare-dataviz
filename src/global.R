@@ -20,7 +20,7 @@ import.packages <- function(pkg) {
 }
 
 foursquare.getCheckins <- function(token, v, startStr, endStr){
-  checkins_cache = collection = paste('checkins', substr(startStr, 1, 10), substr(endStr, 1, 10), "4sqr.cache", sep="_")
+  checkins_cache = collection = paste('/tmp/checkins', substr(startStr, 1, 10), substr(endStr, 1, 10), "4sqr.cache", sep="_")
 
   if(!file.exists(checkins_cache)) {
     warning("Cache not found. Loading from Foursquare API")
