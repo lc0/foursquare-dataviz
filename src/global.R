@@ -1,17 +1,15 @@
 library("RCurl")
 library("RJSONIO")
 
-# Init foursquareToken with a real tocken from https://foursquare.com/developers/apps
-# Do not rewrite token if one is already exists
-if(length(Sys.getenv('FOURSQUARE_TOKEN'))) {
-  foursquareToken <- Sys.getenv('FOURSQUARE_TOKEN')
-}
-# TODO fail in nice way
-if (!exists("foursquareToken"))
-  foursquareToken <- "FOURSQUARE-TOKEN-HERE"
 
 report.start_date <- "2012-01-01"
 report.end_date <- "2016-10-31"
+
+
+# TODO fail in nice way
+if (!exists("foursquareToken"))
+  load('/tmp/foursquare')
+
 
 
 import.packages <- function(pkg) {
@@ -49,7 +47,6 @@ foursquare.getCheckins <- function(token, v, startStr, endStr){
       objects<-fromJSON(json)
 
       if (is.null(objects$response$checkins$count)) {
-        warning(apiUrl)
         warning("Can't get api result, check your credentials")
         return()
       }

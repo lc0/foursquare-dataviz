@@ -5,6 +5,11 @@
 
 ![Tableau presentation of data](https://raw.github.com/lc0/foursquare-dataviz/paper/screenshots/tableau-screen.png)
 
+### Foursquare setup
+Init ```FOURSQUARE_TOKEN``` with a real tocken from https://foursquare.com/developers/apps
+
+
+
 ---
 
 > [lc0.github.io](http://lc0.github.io) &nbsp;&middot;&nbsp;
