@@ -3,11 +3,15 @@ library("RJSONIO")
 
 # Init foursquareToken with a real tocken from https://foursquare.com/developers/apps
 # Do not rewrite token if one is already exists
+if(length(Sys.getenv('FOURSQUARE_TOKEN'))) {
+  foursquareToken <- Sys.getenv('FOURSQUARE_TOKEN')
+}
+# TODO fail in nice way
 if (!exists("foursquareToken"))
   foursquareToken <- "FOURSQUARE-TOKEN-HERE"
 
 report.start_date <- "2012-01-01"
-report.end_date <- "2016-04-01"
+report.end_date <- "2016-10-31"
 
 
 import.packages <- function(pkg) {
