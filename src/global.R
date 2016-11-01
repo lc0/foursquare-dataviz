@@ -25,6 +25,8 @@ foursquare.getCheckins <- function(token, v, startStr, endStr){
   checkins_cache = collection = paste('checkins', substr(startStr, 1, 10), substr(endStr, 1, 10), "4sqr.cache", sep="_")
 
   if(!file.exists(checkins_cache)) {
+    warning("Cache not found. Loading from Foursquare API")
+
     startTS <- as.numeric(as.POSIXct(startStr, format="%Y-%m-%d %H:%M:%S"))
     endTS <- as.numeric(as.POSIXct(endStr, format="%Y-%m-%d %H:%M:%S"))
 
@@ -43,11 +45,12 @@ foursquare.getCheckins <- function(token, v, startStr, endStr){
     while (TRUE) {
       urlTemplate <- "https://api.foursquare.com/v2/users/self/checkins?oauth_token=%s&v=%s&afterTimestamp=%s&beforeTimestamp=%s&limit=%i&offset=%i"
       apiUrl <- sprintf(urlTemplate, token, v, startTS, endTS, limit, offset)
-      json<-getURL(apiUrl, .mapUnicode=TRUE)
+      json <- getURL(apiUrl, .mapUnicode=TRUE)
       objects<-fromJSON(json)
 
       if (is.null(objects$response$checkins$count)) {
-        print("Can't get api result, check your credentials")
+        warning(apiUrl)
+        warning("Can't get api result, check your credentials")
         return()
       }
 
@@ -80,7 +83,7 @@ foursquare.getCheckins <- function(token, v, startStr, endStr){
 
       offset <- offset + limit
     }
-    print(sprintf("Fetched %s checkins", length(country)))
+    warning(sprintf("Fetched %s checkins", length(country)))
 
     checkins.df<-as.data.frame(list(country=country, city=city, lat=lat, lng=lng, category=category, created=created, name=name), stringsAsFactors=FALSE)
     write.table(checkins.df, file=checkins_cache)
@@ -99,6 +102,8 @@ Sys.setlocale("LC_ALL", 'en_US.UTF-8')
 foursquareData <- foursquare.getCheckins(foursquareToken, "20140119",
                                          sprintf("%s 00:00:00", report.start_date),
                                          sprintf("%s 23:59:49",report.end_date))
+warning(sprintf("loaded %i rows from foursquare", length(foursquareData)))
+
 foursquareData$year = format(as.POSIXct(as.numeric(foursquareData$created), origin="1970-01-01"), "%Y")
 
 # filter out rows with NA
