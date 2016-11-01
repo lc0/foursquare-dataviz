@@ -1,16 +1,20 @@
 DOCKER_REPO=sergii/foursquare-dataviz
-TAG=latest
+DOCKER_TAG=latest
+DOCKER_NAME=foursquare-dataviz
 
 
 build:
-	docker build -t ${DOCKER_REPO}:${TAG} .
+	docker build -t ${DOCKER_REPO}:${DOCKER_TAG} .
 
 
 run:
-	docker run -i -t -p 80:80 \
+	docker run -it --name ${DOCKER_NAME} -p 80:80 \
 		-e FOURSQUARE_TOKEN=${FOURSQUARE_TOKEN} ${DOCKER_REPO}
 
 push:
-	docker push ${DOCKER_REPO}:${TAG}
+	docker push ${DOCKER_REPO}:${DOCKER_TAG}
 
-.PHONY: build run push
+restore:
+	docker start -ai ${DOCKER_NAME}
+
+.PHONY: build run push restore
