@@ -3,7 +3,7 @@ library("RJSONIO")
 
 
 report.start_date <- "2012-01-01"
-report.end_date <- "2016-10-31"
+report.end_date <- format(Sys.time(), "%Y-%d-%m")
 
 
 # TODO fail in nice way
